@@ -1,0 +1,9 @@
+# generated or fetched from LeetCode, and their statements are not ours to publish
+problems/*/build/
+problems/*/README.md
+judge/c/
+
+# the LeetCode session, if leetgo reads cookies from a file
+.env*
+
+__pycache__/

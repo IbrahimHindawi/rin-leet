@@ -1,0 +1,25 @@
+import "std/memops.rin"
+
+/* What a LeetCode solution needs beyond std: an arena. Import the containers a
+   solution uses alongside this, one std file each. */
+
+lc_arena_state: memops_arena = {};
+
+/* LeetCode calls your function once per test case and never frees what it
+   returns, so arena memory can be returned as is. Call lc_begin() once, at the
+   top of the function LeetCode calls: it empties the arena for the new case.
+   Helpers take the arena from lc_arena(), which leaves it alone. */
+lc_begin: proc() -> *memops_arena = {
+    if (lc_arena_state.base == null) {
+        memops_arena_initialize(lc_arena_state&, 256 shl 20);
+    }
+    memops_arena_clear(lc_arena_state&);
+    return lc_arena_state&;
+}
+
+lc_arena: proc() -> *memops_arena = {
+    if (lc_arena_state.base == null) {
+        memops_arena_initialize(lc_arena_state&, 256 shl 20);
+    }
+    return lc_arena_state&;
+}
