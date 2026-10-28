@@ -37,18 +37,18 @@ you use:
 import "../../lib/lc.rin"
 import "std/hashmap.rin"
 
-twoSum: proc(nums: [*]i32, numsSize: i32, target: i32, returnSize: *i32) -> [*]i32 = {
+twoSum: proc(nums: ^i32, numsSize: i32, target: i32, returnSize: *i32) -> ^i32 = {
     arena: *memops_arena = lc_begin();
     xs: []i32 = nums[0..numsSize];
     seen: hashmap<i32, i32> = {};
-    out: [*]i32 = cast(memops_arena_push(arena, 2 * sizeof(i32), alignof(i32)), [*]i32);
-    returnSize[0] = 0;
+    out: ^i32 = cast(memops_arena_push(arena, 2 * sizeof(i32), alignof(i32)), ^i32);
+    returnSize* = 0;
     for (i: u64 = 0; i < xs.length; i += 1) {
         at: *i32 = hashmap<i32, i32>get(seen&, target - xs[i]);
         if (at != null) {
-            out[0] = at[0];
+            out[0] = at*;
             out[1] = cast(i, i32);
-            returnSize[0] = 2;
+            returnSize* = 2;
             return out;
         }
         hashmap<i32, i32>put(arena, seen&, xs[i], cast(i, i32));
@@ -58,7 +58,7 @@ twoSum: proc(nums: [*]i32, numsSize: i32, target: i32, returnSize: *i32) -> [*]i
 ```
 
 `int` is `i32`, `long long` is `i64`, `double` is `f64`, `char` is `c8`, and a
-pointer `T*` is `[*]T`. Slice a pointer with its size to get a checked `[]T`.
+pointer `T*` is `^T`. Slice a pointer with its size to get a checked `[]T`.
 
 `lc_begin()` empties the arena for the new test case and returns it: call it
 once, at the top of the function LeetCode calls. A helper that needs the arena
